@@ -3,6 +3,10 @@ project(mosquitto_yaml_auth)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
 find_package(PkgConfig)
 find_package(LLVM REQUIRED CONFIG)
 

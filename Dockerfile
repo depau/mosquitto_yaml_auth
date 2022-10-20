@@ -9,6 +9,6 @@ RUN rm -Rf build || true && \
     cd build && \
     cmake \
       -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -L/usr/lib/llvm13/lib -flto" \
+      -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -L/usr/lib/llvm13/lib" \
       .. && \
     make -j$(nproc)
