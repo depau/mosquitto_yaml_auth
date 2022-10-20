@@ -17,6 +17,7 @@ class AuthManager {
 private:
   std::unordered_map<std::string, std::string> UserPassEntries;
   bool Debug = false;
+  bool AllowAnonymous = false;
 
 public:
   void log(std::string_view message) const {
@@ -36,7 +37,9 @@ public:
     for (int i = 0; i < opt_count; i++) {
       if (std::string_view(opts[i].key) == "users_file") {
         UsersFile = opts[i].value;
-        break;
+      }
+      if (std::string_view(opts[i].key) == "allow_anonymous") {
+        AllowAnonymous = std::string_view(opts[i].value) == "true" || std::string_view(opts[i].value) == "1";
       }
     }
     if (UsersFile.empty()) {
@@ -54,16 +57,24 @@ public:
   void clearConfig() {
     log("Clearing users config");
     UserPassEntries.clear();
+    AllowAnonymous = false;
   }
 
   bool hasUser(const char *username) const {
     if (username == nullptr) {
-      return false;
+      return AllowAnonymous;
+    }
+    if (AllowAnonymous && std::string_view(username) == "") {
+      return true;
     }
     return UserPassEntries.count(username) > 0;
   }
 
   bool checkUser(const char *username, const char *password) {
+    if (AllowAnonymous && (username == nullptr || std::string_view(username) == "")) {
+      log("Allowing anonymous user");
+      return true;
+    }
     if (username == nullptr || password == nullptr) {
       return false;
     }
@@ -74,4 +85,5 @@ public:
     }
     return it->second == password;
   }
+  bool isAnonymousAllowed() { return AllowAnonymous; }
 };

@@ -174,6 +174,10 @@ int mosquitto_auth_acl_check(void *user_data,
 
   const char *username = mosquitto_client_username(client);
   if (!username) {
+    if (authManager->isAnonymousAllowed()) {
+      authManager->log("ACL access granted for anonymous user");
+      return MOSQ_ERR_SUCCESS;
+    }
     authManager->log("No username, deferring ACL check");
     return MOSQ_ERR_PLUGIN_DEFER;
   }
@@ -201,11 +205,6 @@ int mosquitto_auth_acl_check(void *user_data,
  */
 int mosquitto_auth_unpwd_check(void *user_data, struct mosquitto *client, const char *username, const char *password) {
   auto *authManager = static_cast<AuthManager *>(user_data);
-
-  if (username == nullptr || password == nullptr) {
-    authManager->log("No username or password, deferring authentication");
-    return MOSQ_ERR_PLUGIN_DEFER;
-  }
 
   if (!authManager->hasUser(username)) {
     authManager->log("User " + std::string(username) + " not found, deferring");
