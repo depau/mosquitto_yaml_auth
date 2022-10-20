@@ -21,11 +21,16 @@ execute_process(
     OUTPUT_VARIABLE LLVM_STATIC_LIBS
 )
 string(STRIP ${LLVM_STATIC_LIBS} LLVM_STATIC_LIBS)
+execute_process(
+    COMMAND llvm-config --system-libs
+    OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+)
+string(STRIP ${LLVM_SYSTEM_LIBS} LLVM_SYSTEM_LIBS)
 
 pkg_check_modules(MOSQUITTO REQUIRED libmosquitto)
 
 add_library(mosquitto_yaml_auth SHARED src/bindings.cpp src/UserPassEntry.cpp)
 
-target_link_libraries(mosquitto_yaml_auth ${MOSQUITTO_LIBRARIES} ${LLVM_STATIC_LIBS})
+target_link_libraries(mosquitto_yaml_auth ${MOSQUITTO_LIBRARIES} ${LLVM_STATIC_LIBS} ${LLVM_SYSTEM_LIBS} -lncurses)
 target_include_directories(mosquitto_yaml_auth PUBLIC ${MOSQUITTO_INCLUDE_DIRS})
 
