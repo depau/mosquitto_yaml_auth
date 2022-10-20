@@ -28,9 +28,10 @@ execute_process(
 string(STRIP ${LLVM_SYSTEM_LIBS} LLVM_SYSTEM_LIBS)
 
 pkg_check_modules(MOSQUITTO REQUIRED libmosquitto)
+pkg_check_modules(NCURSES REQUIRED ncurses)
 
 add_library(mosquitto_yaml_auth SHARED src/bindings.cpp src/UserPassEntry.cpp)
 
-target_link_libraries(mosquitto_yaml_auth ${MOSQUITTO_LIBRARIES} ${LLVM_STATIC_LIBS} ${LLVM_SYSTEM_LIBS} -lncurses)
+target_link_libraries(mosquitto_yaml_auth ${MOSQUITTO_LIBRARIES} ${LLVM_STATIC_LIBS} ${LLVM_SYSTEM_LIBS} ${NCURSES_LIBRARIES})
 target_include_directories(mosquitto_yaml_auth PUBLIC ${MOSQUITTO_INCLUDE_DIRS})
 

@@ -1,5 +1,5 @@
 FROM eclipse-mosquitto:2.0
-RUN apk add --no-cache make cmake g++ musl-dev binutils llvm13-dev llvm13-static mosquitto-dev pkgconf
+RUN apk add --no-cache make cmake g++ musl-dev binutils llvm13-dev llvm13-static mosquitto-dev pkgconf ncurses-dev ncurses-static
 
 COPY . /sources
 WORKDIR /sources
