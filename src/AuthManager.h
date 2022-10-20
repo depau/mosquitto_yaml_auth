@@ -40,7 +40,12 @@ public:
 
   void clearConfig() { UserPassEntries.clear(); }
 
-  bool hasUser(std::string_view User) const { return UserPassEntries.count(std::string(User)) > 0; }
+  bool hasUser(const char *username) const {
+    if (username == nullptr) {
+      return false;
+    }
+    return UserPassEntries.count(username) > 0;
+  }
 
   bool checkUser(const char *username, const char *password) {
     if (username == nullptr || password == nullptr) {
