@@ -187,6 +187,11 @@ int mosquitto_auth_acl_check(void *user_data,
  */
 int mosquitto_auth_unpwd_check(void *user_data, struct mosquitto *client, const char *username, const char *password) {
   auto *authManager = static_cast<AuthManager *>(user_data);
+
+  if (!authManager->hasUser(username)) {
+    return MOSQ_ERR_PLUGIN_DEFER;
+  }
+
   return authManager->checkUser(username, password) ? MOSQ_ERR_SUCCESS : MOSQ_ERR_AUTH;
 }
 
