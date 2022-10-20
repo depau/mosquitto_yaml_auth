@@ -7,5 +7,8 @@ WORKDIR /sources
 RUN rm -Rf build || true && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -L/usr/lib/llvm13/lib" .. && \
+    cmake \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -L/usr/lib/llvm13/lib -flto" \
+      .. && \
     make -j$(nproc)
