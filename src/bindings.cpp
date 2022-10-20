@@ -168,6 +168,14 @@ int mosquitto_auth_acl_check(void *user_data,
                              int access,
                              struct mosquitto *client,
                              const struct mosquitto_acl_msg *msg) {
+  auto *authManager = static_cast<AuthManager *>(user_data);
+  const char *username = mosquitto_client_username(client);
+  if (!username) {
+    return MOSQ_ERR_PLUGIN_DEFER;
+  }
+  if (authManager->hasUser(username)) {
+    return MOSQ_ERR_SUCCESS;
+  }
   return MOSQ_ERR_PLUGIN_DEFER;
 }
 
