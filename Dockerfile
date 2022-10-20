@@ -7,5 +7,5 @@ WORKDIR /sources
 RUN rm -Rf build || true && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++" .. && \
     make -j$(nproc)
